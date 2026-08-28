@@ -65,6 +65,7 @@ async function remove(app: AppEntity) {
             <td><BaseBadge :tone="a.status === 'active' ? 'success' : 'neutral'">{{ a.status }}</BaseBadge></td>
             <td>{{ a.agency_required ? 'Sí' : 'No' }}</td>
             <td class="actions">
+              <BaseButton size="sm" variant="secondary" tag="a" :href="`/admin/apps/${a.id}`">Gestionar</BaseButton>
               <BaseButton size="sm" variant="secondary" @click="openEdit(a)">Editar</BaseButton>
               <BaseButton size="sm" variant="secondary" @click="toggleActive(a)">{{ a.status === 'active' ? 'Desactivar' : 'Activar' }}</BaseButton>
               <BaseButton size="sm" variant="outline" @click="remove(a)">Eliminar</BaseButton>

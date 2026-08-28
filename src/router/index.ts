@@ -32,6 +32,7 @@ const routes = [
     children: [
       { path: '', name: 'admin-dashboard', component: () => import('@/views/admin/AdminDashboardView.vue') },
       { path: 'apps', name: 'admin-apps', component: () => import('@/views/admin/AdminAppsView.vue') },
+      { path: 'apps/:id', name: 'admin-app-detail', component: () => import('@/views/admin/AdminAppDetailView.vue') },
       { path: 'banners', name: 'admin-banners', component: () => import('@/views/admin/AdminBannersView.vue') },
       { path: 'guias', name: 'admin-guides', component: () => import('@/views/admin/AdminGuidesView.vue') }
     ]
