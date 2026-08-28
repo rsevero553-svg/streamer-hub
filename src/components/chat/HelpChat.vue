@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useUiStore } from '@/stores/ui'
+import { fetchFaqs, type Faq } from '@/services/faqs.service'
 import BaseModal from '@/components/ui/BaseModal.vue'
 
 const ui = useUiStore()
-const faqs = [
-  { q: '¿Cómo empiezo?', a: 'Ve a "Apps para mujeres" o "Apps para hombres", elige una aplicación y revisa su ficha completa.' },
-  { q: '¿Qué es un código de agencia?', a: 'Es un código que algunas aplicaciones requieren para asociarte a una agencia. Lo encuentras en la ficha de cada app.' },
-  { q: '¿Cómo contacto a un tutor?', a: 'Cada aplicación tiene un botón de WhatsApp para hablar directamente con su tutor asignado.' },
-  { q: '¿Cómo me convierto en agente?', a: 'Visita la sección "Ser agente" para ver requisitos y contacto.' }
-]
+const faqs = ref<Faq[]>([])
 const messages = ref<{ from: 'bot' | 'user'; text: string }[]>([
   { from: 'bot', text: 'Hola 👋 Soy el asistente de Streamer Hub. Elige una pregunta frecuente o navega a Guías para más ayuda.' }
 ])
+
+onMounted(async () => {
+  try { faqs.value = await fetchFaqs() } catch { faqs.value = [] }
+})
 
 function ask(a: string) {
   messages.value.push({ from: 'bot', text: a })
@@ -26,7 +26,7 @@ function ask(a: string) {
         <p v-for="(m, i) in messages" :key="i" class="chat__msg" :class="`chat__msg--${m.from}`">{{ m.text }}</p>
       </div>
       <div class="chat__faqs">
-        <button v-for="f in faqs" :key="f.q" class="chat__faq" @click="ask(f.a)">{{ f.q }}</button>
+        <button v-for="f in faqs" :key="f.id" class="chat__faq" @click="ask(f.answer)">{{ f.question }}</button>
       </div>
       <RouterLink to="/guias" class="chat__link" @click="ui.toggleHelpChat(false)">Ver todas las guías →</RouterLink>
     </div>

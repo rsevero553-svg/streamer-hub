@@ -34,7 +34,11 @@ const routes = [
       { path: 'apps', name: 'admin-apps', component: () => import('@/views/admin/AdminAppsView.vue') },
       { path: 'apps/:id', name: 'admin-app-detail', component: () => import('@/views/admin/AdminAppDetailView.vue') },
       { path: 'banners', name: 'admin-banners', component: () => import('@/views/admin/AdminBannersView.vue') },
-      { path: 'guias', name: 'admin-guides', component: () => import('@/views/admin/AdminGuidesView.vue') }
+      { path: 'guias', name: 'admin-guides', component: () => import('@/views/admin/AdminGuidesView.vue') },
+      { path: 'usuarios', name: 'admin-users', component: () => import('@/views/admin/AdminUsersView.vue') },
+      { path: 'faqs', name: 'admin-faqs', component: () => import('@/views/admin/AdminFaqsView.vue') },
+      { path: 'redes-sociales', name: 'admin-social', component: () => import('@/views/admin/AdminSocialView.vue') },
+      { path: 'politicas', name: 'admin-policies', component: () => import('@/views/admin/AdminPoliciesView.vue') }
     ]
   },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFoundView.vue') }

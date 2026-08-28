@@ -3,7 +3,11 @@ const links = [
   { to: '/admin', label: 'Resumen' },
   { to: '/admin/apps', label: 'Aplicaciones' },
   { to: '/admin/banners', label: 'Banners' },
-  { to: '/admin/guias', label: 'Guías' }
+  { to: '/admin/guias', label: 'Guías' },
+  { to: '/admin/usuarios', label: 'Usuarios' },
+  { to: '/admin/faqs', label: 'Preguntas frecuentes' },
+  { to: '/admin/redes-sociales', label: 'Redes sociales' },
+  { to: '/admin/politicas', label: 'Políticas' }
 ]
 </script>
 
