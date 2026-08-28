@@ -57,13 +57,14 @@ async function remove(app: AppEntity) {
 
     <BaseCard>
       <table class="table">
-        <thead><tr><th>Nombre</th><th>Público</th><th>Estado</th><th>Agencia</th><th></th></tr></thead>
+        <thead><tr><th>Nombre</th><th>Público</th><th>Estado</th><th>Agencia</th><th>Destacada</th><th></th></tr></thead>
         <tbody>
           <tr v-for="a in apps" :key="a.id">
             <td>{{ a.name }}</td>
             <td>{{ a.gender === 'women' ? 'Mujeres' : 'Hombres' }}</td>
             <td><BaseBadge :tone="a.status === 'active' ? 'success' : 'neutral'">{{ a.status }}</BaseBadge></td>
             <td>{{ a.agency_required ? 'Sí' : 'No' }}</td>
+            <td>{{ a.featured ? '⭐' : '—' }}</td>
             <td class="actions">
               <BaseButton size="sm" variant="secondary" tag="a" :href="`/admin/apps/${a.id}`">Gestionar</BaseButton>
               <BaseButton size="sm" variant="secondary" @click="openEdit(a)">Editar</BaseButton>
@@ -83,6 +84,7 @@ async function remove(app: AppEntity) {
         <BaseInput v-model="editing.logo_url" label="URL del logo" />
         <BaseInput v-model="editing.banner_url" label="URL del banner" />
         <label class="checkbox"><input type="checkbox" v-model="editing.agency_required" /> Requiere agencia</label>
+        <label class="checkbox"><input type="checkbox" v-model="editing.featured" /> Destacada en Home</label>
         <BaseButton @click="save">Guardar</BaseButton>
       </div>
     </BaseModal>

@@ -1,74 +1,47 @@
 # Streamer Hub
 
 Plataforma educativa e informativa para orientar a streamers/usuarios sobre
-aplicaciones de trabajo online (mensajería, videollamadas, match), con guías,
-sistema de agencias, tutores de WhatsApp y canales de Telegram.
+aplicaciones de trabajo online. Stack: Vue 3 + TypeScript + Vite + Pinia + Supabase + PWA.
 
-**Stack:** Vue 3 + TypeScript + Vite + Vue Router + Pinia + Supabase + PWA.
+## Estado real frente a la especificación original (65 secciones)
 
-## 1. Configuración local
+### ✅ Completo
+- Arquitectura, Design System, router, layout, PWA, motion 2.5D
+- Auth (teléfono obligatorio), perfil, roles user/admin, RLS
+- Apps mujeres/hombres + ficha (actividades, retiros, agencia, código copiable, tutor WhatsApp, Telegram, enlaces)
+- Guías (generales y por app), Ser agente (contenido estático)
+- Admin: CRUD de apps, banners, guías, y gestión completa por app (actividades/retiros/agencias/códigos/contactos/enlaces)
+- Categorías dinámicas (`application_categories`) y campo `featured` — agregados en esta iteración
+- Chatbot de ayuda tipo FAQ, botones flotantes, fondo dinámico animado
 
+### ⚠️ Pendiente / incompleto (honestidad ante todo)
+- **Sin panel admin para:** usuarios (consultar/activar/suspender/cambiar rol), redes sociales,
+  configuración de textos del Home, políticas y FAQs — hoy son contenido estático en el código,
+  no editable desde el admin como pide la sección 49 del prompt original.
+- **Ficha de app simplificada:** campos como público objetivo detallado, edad mínima, países
+  disponibles, sistema de puntos estructurado, `last_verified_at` — no existen como columnas
+  separadas, solo como texto libre en `general_policy` / `withdrawal_policy`.
+- **Sin recuperación de contraseña en la UI** (el servicio existe en `auth.service.ts`, falta la vista).
+- **SEO básico:** sin meta tags dinámicos por página/app, sin Open Graph por aplicación.
+- **Accesibilidad parcial:** aria-labels en botones flotantes, falta auditoría completa de teclado/contraste.
+- **Iconos PWA son placeholder** — reemplazar `public/icons/icon-192.png` y `icon-512.png` con el logo real.
+- **Responsive probado solo por CSS/breakpoints, no en dispositivos reales.**
+
+## Configuración local
 ```bash
 npm install
 cp .env.example .env
-# Edita .env con tu VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
 npm run dev
 ```
 
-## 2. Base de datos (Supabase)
-
-El proyecto Supabase **Rico** ya tiene aplicado el esquema completo:
-18 tablas, RLS, funciones (`is_admin`, `handle_new_user`), triggers de
-`updated_at`, y buckets de storage (`app-assets`, `banners`).
-
-Para crear tu primer usuario administrador, después de registrarte desde
-la app, ejecuta en el SQL Editor de Supabase:
-
+## Base de datos (Supabase — proyecto "Rico")
+Esquema completo aplicado vía migraciones (ver `supabase/migrations/`).
+Para hacer admin a un usuario:
 ```sql
 update public.profiles set role = 'admin' where email = 'tu-correo@ejemplo.com';
 ```
+Cierra sesión y vuelve a entrar para que el rol se refresque en el cliente.
 
-## 3. Publicar el código (GitHub, GitLab o Bitbucket)
-
-Render necesita un repositorio Git para desplegar. Pasos:
-
-```bash
-cd streamer-hub
-git init
-git add .
-git commit -m "Initial commit: Streamer Hub"
-git branch -M main
-git remote add origin <URL-DE-TU-REPOSITORIO-VACIO>
-git push -u origin main
-```
-
-Crea antes un repositorio vacío en https://github.com/new (u otro proveedor).
-
-## 4. Desplegar en Render
-
-Una vez el código esté en el repositorio, indícame la URL del repo y lo
-despliego directamente como **Static Site** en Render (build: `npm install && npm run build`,
-carpeta publicada: `dist`). Deberás además configurar las variables de entorno
-`VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` en el servicio de Render.
-
-## 5. Estado del proyecto
-
-Fases completadas de la especificación original:
-- ✅ Configuración base, Design System, Router, Layout global
-- ✅ Supabase client + servicios + tipos TypeScript
-- ✅ Home (fondo dinámico, banners, destacadas, cómo funciona)
-- ✅ Apps para mujeres / hombres + ficha de detalle completa
-- ✅ Guías (lista + detalle)
-- ✅ Ser agente
-- ✅ Auth (registro con teléfono obligatorio, login, perfil)
-- ✅ PWA (manifest + service worker vía vite-plugin-pwa)
-- ✅ Chatbot de ayuda (FAQ) + botones flotantes
-- ✅ Panel admin (dashboard, CRUD de apps, banners, guías)
-- ✅ RLS y roles (user/admin)
-- ⏳ Pendiente para siguientes iteraciones: CRUD admin de actividades/retiros/
-  agencias/tutores por app, verificación de build en CI, iconos PWA definitivos
-  (los actuales son placeholder), tests responsive exhaustivos en dispositivos reales.
-
-**Nota sobre estética:** se implementó un sistema de motion 2.5D (tilt-on-hover,
-parpadeo de fondo degradado animado, fade-up, glow) con CSS puro — sin Three.js,
-como se acordó, para mantener el proyecto ligero y rápido.
+## Deploy
+Desplegado en Render como Static Site, conectado a GitHub con auto-deploy.
+Build: `npm install && npm run build` · Publish dir: `dist`.
