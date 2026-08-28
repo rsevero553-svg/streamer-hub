@@ -1,0 +1,3 @@
+-- Ya aplicado en el proyecto Supabase "Rico" (yrpdmilkcmtqarbsbblc).
+-- Se incluye aquí para versionado y para reproducir el esquema en otros entornos.
+-- Ver contenido completo aplicado vía Supabase MCP en esta conversación.
