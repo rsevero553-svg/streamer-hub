@@ -20,3 +20,9 @@ h1, h2, h3, h4, p { margin: 0; }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--color-blue-950); }
 ::-webkit-scrollbar-thumb { background: var(--color-pink-700); border-radius: var(--radius-full); }
+
+:focus-visible {
+  outline: 2px solid var(--color-pink-400);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

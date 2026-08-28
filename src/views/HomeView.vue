@@ -6,6 +6,9 @@ import QuickAccess from '@/components/home/QuickAccess.vue'
 import FeaturedApps from '@/components/home/FeaturedApps.vue'
 import HowItWorks from '@/components/home/HowItWorks.vue'
 import { useAppsStore } from '@/stores/apps'
+import { useMeta } from '@/composables/useMeta'
+
+useMeta('Inicio', 'Plataforma educativa e informativa para aprender a trabajar en aplicaciones online: mensajería, videollamadas y más, con guías y orientación.')
 
 const store = useAppsStore()
 onMounted(() => { store.loadAll() })

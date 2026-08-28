@@ -20,18 +20,25 @@ async function load() {
 onMounted(load)
 
 function openNew() {
-  editing.value = { name: '', slug: '', gender: 'women', status: 'active', agency_required: false, sort_order: 0 }
+  editing.value = { name: '', slug: '', gender: 'women', status: 'active', agency_required: false, sort_order: 0, countriesText: '' } as any
   modalOpen.value = true
 }
 function openEdit(app: AppEntity) {
-  editing.value = { ...app }
+  editing.value = { ...app, countriesText: (app.available_countries ?? []).join(', ') } as any
   modalOpen.value = true
 }
 async function save() {
-  if (editing.value.id) {
-    await supabase.from('apps').update(editing.value).eq('id', editing.value.id)
+  const payload: any = { ...editing.value }
+  payload.available_countries = payload.countriesText
+    ? payload.countriesText.split(',').map((c: string) => c.trim()).filter(Boolean)
+    : null
+  delete payload.countriesText
+  payload.last_verified_at = new Date().toISOString()
+
+  if (payload.id) {
+    await supabase.from('apps').update(payload).eq('id', payload.id)
   } else {
-    await supabase.from('apps').insert(editing.value)
+    await supabase.from('apps').insert(payload)
   }
   modalOpen.value = false
   await load()
@@ -85,6 +92,10 @@ async function remove(app: AppEntity) {
         <BaseInput v-model="editing.banner_url" label="URL del banner" />
         <label class="checkbox"><input type="checkbox" v-model="editing.agency_required" /> Requiere agencia</label>
         <label class="checkbox"><input type="checkbox" v-model="editing.featured" /> Destacada en Home</label>
+        <BaseInput v-model="editing.target_audience" label="Público objetivo (ej. mayores de 18, streamers principiantes...)" />
+        <BaseInput v-model.number="editing.minimum_age" type="number" label="Edad mínima" />
+        <BaseInput v-model="editing.countriesText" label="Países disponibles (separados por coma)" />
+        <BaseInput v-model="editing.points_system" label="Sistema de puntos/monedas (descripción breve)" />
         <BaseButton @click="save">Guardar</BaseButton>
       </div>
     </BaseModal>

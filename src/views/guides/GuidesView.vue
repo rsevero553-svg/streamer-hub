@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useMeta } from '@/composables/useMeta'
+useMeta('Guías', 'Guías paso a paso para comenzar, registrarte y sacar el máximo provecho de cada aplicación.')
 import { onMounted, ref } from 'vue'
 import { fetchGuides } from '@/services/guides.service'
 import type { Guide } from '@/types/guide'

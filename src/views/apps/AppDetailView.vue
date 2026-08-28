@@ -5,6 +5,7 @@ import { fetchAppBySlug } from '@/services/applications.service'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { copyToClipboard } from '@/utils/clipboard'
 import type { AppDetail } from '@/types/application'
+import { useMeta } from '@/composables/useMeta'
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
@@ -16,10 +17,20 @@ const app = ref<AppDetail | null>(null)
 const loading = ref(true)
 const copied = ref<string | null>(null)
 
+const pageTitle = ref('Cargando...')
+const pageDescription = ref('')
+useMeta(pageTitle, pageDescription)
+
 onMounted(async () => {
   loading.value = true
   app.value = await fetchAppBySlug(route.params.slug as string)
   loading.value = false
+  if (app.value) {
+    pageTitle.value = app.value.name
+    pageDescription.value = app.value.description || `Conoce cómo funciona ${app.value.name}: actividades, retiros, agencia y guías.`
+  } else {
+    pageTitle.value = 'Aplicación no encontrada'
+  }
 })
 
 async function copyCode(code: string) {
@@ -58,6 +69,15 @@ const telegramContacts = computed(() => app.value?.contacts.filter(c => c.type =
       <BaseCard class="detail__section">
         <h2>Descripción</h2>
         <p>{{ app.description }}</p>
+        <div class="detail__meta" v-if="app.target_audience || app.minimum_age || (app.available_countries && app.available_countries.length) || app.points_system">
+          <p v-if="app.target_audience"><strong>Público objetivo:</strong> {{ app.target_audience }}</p>
+          <p v-if="app.minimum_age"><strong>Edad mínima:</strong> {{ app.minimum_age }} años</p>
+          <p v-if="app.available_countries && app.available_countries.length"><strong>Países disponibles:</strong> {{ app.available_countries.join(', ') }}</p>
+          <p v-if="app.points_system"><strong>Sistema de puntos:</strong> {{ app.points_system }}</p>
+        </div>
+        <p v-if="app.last_verified_at" class="detail__verified">
+          ✓ Información verificada el {{ new Date(app.last_verified_at).toLocaleDateString('es') }} — proporcionada por la plataforma, no por la aplicación externa.
+        </p>
       </BaseCard>
 
       <BaseCard v-if="app.activities.length" class="detail__section">
@@ -140,6 +160,9 @@ const telegramContacts = computed(() => app.value?.contacts.filter(c => c.type =
 .detail__body { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-7) 0; }
 .detail__section h2 { font-size: var(--fs-lg); margin-bottom: var(--space-3); }
 .detail__section p { color: var(--color-text-muted); line-height: 1.6; }
+.detail__meta { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: var(--space-2); }
+.detail__meta strong { color: var(--color-text); }
+.detail__verified { margin-top: var(--space-4); font-size: var(--fs-xs); color: var(--color-success); }
 .detail__list { display: flex; flex-direction: column; gap: var(--space-2); }
 .detail__row { display: flex; justify-content: space-between; padding: var(--space-3); background: var(--color-surface-strong); border-radius: var(--radius-md); }
 .detail__withdrawal { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border); }

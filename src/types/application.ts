@@ -18,6 +18,11 @@ export interface AppEntity {
   general_policy: string | null
   sort_order: number
   featured?: boolean
+  target_audience: string | null
+  minimum_age: number | null
+  available_countries: string[] | null
+  points_system: string | null
+  last_verified_at: string | null
   created_at: string
   updated_at: string
 }

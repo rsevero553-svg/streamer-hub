@@ -14,6 +14,7 @@ const routes = [
       { path: 'guias/:id', name: 'guide-detail', component: () => import('@/views/guides/GuideDetailView.vue') },
       { path: 'ser-agente', name: 'become-agent', component: () => import('@/views/agent/BecomeAgentView.vue') },
       { path: 'iniciar-sesion', name: 'login', component: () => import('@/views/auth/LoginView.vue') },
+      { path: 'recuperar-contrasena', name: 'forgot-password', component: () => import('@/views/auth/ForgotPasswordView.vue') },
       { path: 'registro', name: 'register', component: () => import('@/views/auth/RegisterView.vue') },
       {
         path: 'perfil',
@@ -38,7 +39,8 @@ const routes = [
       { path: 'usuarios', name: 'admin-users', component: () => import('@/views/admin/AdminUsersView.vue') },
       { path: 'faqs', name: 'admin-faqs', component: () => import('@/views/admin/AdminFaqsView.vue') },
       { path: 'redes-sociales', name: 'admin-social', component: () => import('@/views/admin/AdminSocialView.vue') },
-      { path: 'politicas', name: 'admin-policies', component: () => import('@/views/admin/AdminPoliciesView.vue') }
+      { path: 'politicas', name: 'admin-policies', component: () => import('@/views/admin/AdminPoliciesView.vue') },
+      { path: 'ser-agente', name: 'admin-agent-content', component: () => import('@/views/admin/AdminAgentContentView.vue') }
     ]
   },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFoundView.vue') }

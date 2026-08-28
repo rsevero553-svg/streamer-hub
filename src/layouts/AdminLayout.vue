@@ -7,7 +7,8 @@ const links = [
   { to: '/admin/usuarios', label: 'Usuarios' },
   { to: '/admin/faqs', label: 'Preguntas frecuentes' },
   { to: '/admin/redes-sociales', label: 'Redes sociales' },
-  { to: '/admin/politicas', label: 'Políticas' }
+  { to: '/admin/politicas', label: 'Políticas' },
+  { to: '/admin/ser-agente', label: 'Contenido: Ser agente' }
 ]
 </script>
 

@@ -1,17 +1,25 @@
 <script setup lang="ts">
+import { useMeta } from '@/composables/useMeta'
+useMeta('Ser agente', 'Conoce los requisitos y beneficios para convertirte en agente dentro de Streamer Hub.')
+
+import { onMounted, ref } from 'vue'
+import { fetchPublicSettings } from '@/services/settings.service'
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 
-const benefits = [
-  'Acompaña y capacita a nuevos usuarios en las aplicaciones.',
-  'Genera ingresos adicionales gestionando tu propia red.',
-  'Acceso a materiales y guías exclusivas para agentes.'
-]
-const requirements = [
-  'Ser mayor de edad.',
-  'Tener disponibilidad para orientar a otras personas.',
-  'Conocer al menos una aplicación a fondo.'
-]
+const benefits = ref<string[]>([])
+const requirements = ref<string[]>([])
+
+onMounted(async () => {
+  try {
+    const settings = await fetchPublicSettings()
+    benefits.value = (settings.agent_benefits || '').split('\n').filter(Boolean)
+    requirements.value = (settings.agent_requirements || '').split('\n').filter(Boolean)
+  } catch {
+    benefits.value = []
+    requirements.value = []
+  }
+})
 </script>
 
 <template>

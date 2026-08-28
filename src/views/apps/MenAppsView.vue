@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useMeta } from '@/composables/useMeta'
+useMeta('Apps para hombres', 'Explora aplicaciones disponibles para hombres, con guías y orientación completa.')
 import { onMounted } from 'vue'
 import { useAppsStore } from '@/stores/apps'
 import ApplicationGrid from '@/components/apps/ApplicationGrid.vue'
