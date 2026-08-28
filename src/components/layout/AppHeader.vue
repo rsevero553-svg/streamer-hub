@@ -27,6 +27,7 @@ const auth = useAuthStore()
           <RouterLink to="/registro" class="btn-mini">Registrarse</RouterLink>
         </template>
         <RouterLink v-else to="/perfil" class="btn-mini">Mi perfil</RouterLink>
+        <RouterLink v-if="auth.isAdmin" to="/admin" class="header__link header__link--muted">Admin</RouterLink>
 
         <button class="header__burger" @click="ui.toggleMobileMenu()" aria-label="Abrir menú">
           <span></span><span></span><span></span>

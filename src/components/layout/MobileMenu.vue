@@ -28,6 +28,7 @@ const links = [
           <RouterLink to="/registro" class="btn-fill" @click="ui.toggleMobileMenu(false)">Registrarse</RouterLink>
         </template>
         <RouterLink v-else to="/perfil" class="btn-fill" @click="ui.toggleMobileMenu(false)">Mi perfil</RouterLink>
+        <RouterLink v-if="auth.isAdmin" to="/admin" class="btn-outline" @click="ui.toggleMobileMenu(false)">Panel admin</RouterLink>
       </div>
     </div>
   </Transition>
