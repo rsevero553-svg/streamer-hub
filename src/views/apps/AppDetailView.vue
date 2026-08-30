@@ -10,6 +10,7 @@ import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseSpinner from '@/components/ui/BaseSpinner.vue'
+import BaseAlert from '@/components/ui/BaseAlert.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 
 const route = useRoute()
@@ -23,7 +24,8 @@ useMeta(pageTitle, pageDescription)
 
 onMounted(async () => {
   loading.value = true
-  app.value = await fetchAppBySlug(route.params.slug as string)
+  const slugParam = (route.params.appSlug as string) || (route.params.slug as string)
+  app.value = await fetchAppBySlug(slugParam)
   loading.value = false
   if (app.value) {
     pageTitle.value = app.value.name
@@ -110,6 +112,39 @@ const telegramContacts = computed(() => app.value?.contacts.filter(c => c.type =
         </div>
       </BaseCard>
 
+      <BaseCard v-if="app.currency_conversions.length" class="detail__section">
+        <h2>Conversión a USD</h2>
+        <ul class="detail__list">
+          <li v-for="c in app.currency_conversions" :key="c.id" class="detail__row">
+            <span>{{ c.units_per_usd }} {{ c.unit_name }}</span>
+            <strong>= 1 USD</strong>
+          </li>
+        </ul>
+      </BaseCard>
+
+      <BaseCard v-if="app.income_sources.length" class="detail__section">
+        <h2>Otros métodos de ingreso</h2>
+        <div class="income-table">
+          <div class="income-table__head">
+            <span>Método</span><span>Duración</span><span>Valor</span>
+          </div>
+          <div v-for="s in app.income_sources" :key="s.id" class="income-table__row">
+            <span>{{ s.name }}</span>
+            <span>{{ s.duration_label || '—' }}</span>
+            <span>
+              {{ s.value }} {{ s.unit }}
+              <template v-if="s.usd_per_min"> · ${{ s.usd_per_min }}/min</template>
+              <template v-if="s.points_per_min"> · {{ s.points_per_min }} pts/min</template>
+            </span>
+          </div>
+        </div>
+      </BaseCard>
+
+      <BaseAlert v-if="app.requires_verification" tone="warning" class="detail__section">
+        ⚠️ Esta aplicación requiere verificación: al contactar a tu tutor deberás enviar una
+        captura de pantalla de tu ID y una foto del momento.
+      </BaseAlert>
+
       <div class="detail__grid">
         <BaseCard v-if="whatsappContacts.length" class="detail__section">
           <h2>Tutor de WhatsApp</h2>
@@ -117,7 +152,7 @@ const telegramContacts = computed(() => app.value?.contacts.filter(c => c.type =
             v-for="c in whatsappContacts"
             :key="c.id"
             tag="a"
-            :href="buildWhatsAppUrl(c.url, `Hola, estoy interesado/a en trabajar con la aplicación ${app.name} y necesito orientación.`)"
+            :href="buildWhatsAppUrl(c.url, `Hola, estoy interesado/a en trabajar con la aplicación ${app.name} y necesito orientación.${app.requires_verification ? ' Entiendo que debo enviar captura de mi ID y una foto del momento.' : ''}`)"
             target="_blank"
           >
             Hablar con mi tutor
@@ -171,5 +206,8 @@ const telegramContacts = computed(() => app.value?.contacts.filter(c => c.type =
 .detail__code code { font-size: var(--fs-lg); font-weight: 800; letter-spacing: 0.1em; background: var(--color-surface-strong); padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); }
 .detail__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
 .detail__links { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+.income-table { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--fs-sm); }
+.income-table__head { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: var(--space-3); color: var(--color-text-faint); font-size: var(--fs-xs); text-transform: uppercase; padding: 0 var(--space-3); }
+.income-table__row { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: var(--space-3); background: var(--color-surface-strong); padding: var(--space-3); border-radius: var(--radius-md); align-items: center; }
 @media (max-width: 768px) { .detail__grid { grid-template-columns: 1fr; } .detail__hero-inner { flex-direction: column; text-align: center; } }
 </style>

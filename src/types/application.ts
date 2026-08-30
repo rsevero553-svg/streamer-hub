@@ -18,6 +18,8 @@ export interface AppEntity {
   general_policy: string | null
   sort_order: number
   featured?: boolean
+  owner_id: string | null
+  requires_verification: boolean
   target_audience: string | null
   minimum_age: number | null
   available_countries: string[] | null
@@ -35,8 +37,32 @@ export interface AppActivity {
 export interface WithdrawalMethod {
   id: string; app_id: string; name: string; description: string | null
   minimum_amount: number | null; maximum_amount: number | null
-  frequency: string | null; processing_time: string | null; fee: string | null
+  frequency: string | null; frequency_type: 'daily' | 'weekly' | 'monthly' | 'accumulated' | null
+  processing_time: string | null; fee: string | null
   requirements: string | null; is_active: boolean
+}
+
+export interface CurrencyConversion {
+  id: string
+  app_id: string
+  unit_name: string
+  units_per_usd: number
+  notes: string | null
+  is_active: boolean
+}
+
+export interface IncomeSource {
+  id: string
+  app_id: string
+  name: string
+  source_type: string | null
+  duration_label: string | null
+  unit: string
+  value: number
+  points_per_min: number | null
+  usd_per_min: number | null
+  is_active: boolean
+  sort_order: number
 }
 
 export interface Agency {
@@ -66,4 +92,6 @@ export interface AppDetail extends AppEntity {
   agency_codes: AgencyCode[]
   contacts: AppContact[]
   links: AppLink[]
+  currency_conversions: CurrencyConversion[]
+  income_sources: IncomeSource[]
 }

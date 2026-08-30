@@ -49,6 +49,7 @@ async function logout() {
           <div class="actions">
             <BaseButton @click="save">Guardar cambios</BaseButton>
             <BaseButton v-if="auth.isAdmin" tag="a" href="/admin" variant="secondary">Ir al panel admin</BaseButton>
+            <BaseButton v-if="auth.profile?.role === 'moderator'" tag="a" href="/moderador" variant="secondary">Ir a mi panel de agencia</BaseButton>
             <BaseButton variant="secondary" @click="logout">Cerrar sesión</BaseButton>
           </div>
         </div>

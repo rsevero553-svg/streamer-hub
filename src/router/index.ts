@@ -40,9 +40,31 @@ const routes = [
       { path: 'faqs', name: 'admin-faqs', component: () => import('@/views/admin/AdminFaqsView.vue') },
       { path: 'redes-sociales', name: 'admin-social', component: () => import('@/views/admin/AdminSocialView.vue') },
       { path: 'politicas', name: 'admin-policies', component: () => import('@/views/admin/AdminPoliciesView.vue') },
-      { path: 'ser-agente', name: 'admin-agent-content', component: () => import('@/views/admin/AdminAgentContentView.vue') }
+      { path: 'ser-agente', name: 'admin-agent-content', component: () => import('@/views/admin/AdminAgentContentView.vue') },
+      { path: 'moderadores', name: 'admin-moderators', component: () => import('@/views/admin/AdminModeratorsView.vue') }
     ]
   },
+  {
+    path: '/moderador',
+    component: () => import('@/layouts/ModeratorLayout.vue'),
+    meta: { requiresAuth: true, requiresModerator: true },
+    children: [
+      { path: '', name: 'moderator-dashboard', component: () => import('@/views/moderator/ModeratorDashboardView.vue') },
+      { path: 'apps', name: 'moderator-apps', component: () => import('@/views/moderator/ModeratorAppsView.vue') },
+      { path: 'apps/:id', name: 'moderator-app-detail', component: () => import('@/views/moderator/ModeratorAppDetailView.vue') },
+      { path: 'guias', name: 'moderator-guides', component: () => import('@/views/moderator/ModeratorGuidesView.vue') },
+      { path: 'agencia', name: 'moderator-agency', component: () => import('@/views/moderator/ModeratorAgencyView.vue') },
+      { path: 'membresia', name: 'moderator-membership', component: () => import('@/views/moderator/ModeratorMembershipView.vue') }
+    ]
+  },
+  {
+    path: '/agencia/:slug',
+    component: () => import('@/layouts/AgencyLayout.vue'),
+    children: [
+      { path: '', name: 'agency-home', component: () => import('@/views/agency/AgencyHomeView.vue') },
+      { path: 'apps/:appSlug', name: 'agency-app-detail', component: () => import('@/views/apps/AppDetailView.vue') },
+      { path: 'ser-agente', name: 'agency-become-agent', component: () => import('@/views/agency/AgencyBecomeAgentView.vue') }
+    ]
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFoundView.vue') }
 ]
 
@@ -60,6 +82,9 @@ router.beforeEach(async (to) => {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
   if (to.meta.requiresAdmin && !auth.isAdmin) {
+    return { name: 'home' }
+  }
+  if (to.meta.requiresModerator && auth.profile?.role !== 'moderator' && !auth.isAdmin) {
     return { name: 'home' }
   }
   return true

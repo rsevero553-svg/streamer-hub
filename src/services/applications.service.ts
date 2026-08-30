@@ -36,13 +36,15 @@ export async function fetchAppBySlug(slug: string): Promise<AppDetail | null> {
 
   if (error || !app) return null
 
-  const [activities, withdrawal_methods, agencies, agency_codes, contacts, links] = await Promise.all([
+  const [activities, withdrawal_methods, agencies, agency_codes, contacts, links, currency_conversions, income_sources] = await Promise.all([
     supabase.from('app_activities').select('*').eq('app_id', app.id).eq('is_active', true).order('sort_order'),
     supabase.from('app_withdrawal_methods').select('*').eq('app_id', app.id).eq('is_active', true),
     supabase.from('app_agencies').select('*').eq('app_id', app.id).eq('is_active', true),
     supabase.from('app_agency_codes').select('*').eq('app_id', app.id).eq('is_active', true),
     supabase.from('app_contacts').select('*').eq('app_id', app.id).eq('is_active', true).order('sort_order'),
-    supabase.from('app_links').select('*').eq('app_id', app.id).eq('is_active', true).order('sort_order')
+    supabase.from('app_links').select('*').eq('app_id', app.id).eq('is_active', true).order('sort_order'),
+    supabase.from('app_currency_conversions').select('*').eq('app_id', app.id).eq('is_active', true),
+    supabase.from('app_income_sources').select('*').eq('app_id', app.id).eq('is_active', true).order('sort_order')
   ])
 
   return {
@@ -52,6 +54,8 @@ export async function fetchAppBySlug(slug: string): Promise<AppDetail | null> {
     agencies: agencies.data ?? [],
     agency_codes: agency_codes.data ?? [],
     contacts: contacts.data ?? [],
-    links: links.data ?? []
+    links: links.data ?? [],
+    currency_conversions: currency_conversions.data ?? [],
+    income_sources: income_sources.data ?? []
   } as AppDetail
 }

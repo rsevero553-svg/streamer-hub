@@ -5,14 +5,14 @@ import EmptyState from '@/components/ui/EmptyState.vue'
 import BaseSpinner from '@/components/ui/BaseSpinner.vue'
 import type { LoadState } from '@/types/misc'
 
-defineProps<{ apps: AppEntity[]; state: LoadState }>()
+defineProps<{ apps: AppEntity[]; state: LoadState; basePath?: string }>()
 </script>
 
 <template>
   <BaseSpinner v-if="state === 'loading'" />
   <EmptyState v-else-if="!apps.length" message="No hay aplicaciones disponibles actualmente." />
   <div v-else class="app-grid">
-    <ApplicationCard v-for="app in apps" :key="app.id" :app="app" class="animate-fade-up" />
+    <ApplicationCard v-for="app in apps" :key="app.id" :app="app" :base-path="basePath" class="animate-fade-up" />
   </div>
 </template>
 

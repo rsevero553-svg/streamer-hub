@@ -1,16 +1,25 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { fetchSocialLinks } from '@/services/social.service'
+import { fetchPublicSettings } from '@/services/settings.service'
 import { useUiStore } from '@/stores/ui'
+import { useAuthStore } from '@/stores/auth'
+import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import type { SocialLink } from '@/types/misc'
 
 const ui = useUiStore()
+const auth = useAuthStore()
 const socials = ref<SocialLink[]>([])
 const canInstall = ref(false)
+const adminWhatsapp = ref('')
 let deferredPrompt: any = null
 
 onMounted(async () => {
   try { socials.value = (await fetchSocialLinks()).filter(s => s.position !== 'left') } catch { socials.value = [] }
+  try {
+    const settings = await fetchPublicSettings()
+    adminWhatsapp.value = settings.admin_whatsapp || ''
+  } catch { adminWhatsapp.value = '' }
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault()
@@ -18,6 +27,10 @@ onMounted(async () => {
     canInstall.value = true
   })
 })
+
+function showSoyAgente() {
+  return adminWhatsapp.value && auth.profile?.role !== 'moderator' && !auth.isAdmin
+}
 
 async function installApp() {
   if (!deferredPrompt) return
@@ -37,6 +50,16 @@ async function installApp() {
       <button v-if="canInstall" class="floating__btn floating__btn--install animate-glow" @click="installApp" aria-label="Instalar aplicación">⬇</button>
     </div>
 
+    <a
+      v-if="showSoyAgente()"
+      class="floating__soy-agente animate-glow"
+      :href="buildWhatsAppUrl(adminWhatsapp, 'Hola, quiero ser agente en Streamer Hub. Me gustaría más información.')"
+      target="_blank"
+      rel="noopener"
+    >
+      Soy agente
+    </a>
+
     <button class="floating__chat animate-glow" @click="ui.toggleHelpChat()" aria-label="Abrir chat de ayuda">💬</button>
   </div>
 </template>
@@ -55,6 +78,12 @@ async function installApp() {
   font-weight: 700; color: var(--color-text);
 }
 .floating__btn--install { background: var(--gradient-brand); border: none; color: white; }
+.floating__soy-agente {
+  position: absolute; left: var(--space-5); bottom: 84px; pointer-events: auto;
+  background: var(--gradient-brand); color: white; font-size: var(--fs-xs); font-weight: 700;
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+  box-shadow: var(--shadow-glow-pink); white-space: nowrap;
+}
 .floating__chat {
   position: absolute; left: var(--space-5); bottom: var(--space-6); pointer-events: auto;
   width: 56px; height: 56px; border-radius: 50%; border: none;

@@ -3,11 +3,11 @@ import type { AppEntity } from '@/types/application'
 import { onTilt, resetTilt } from '@/utils/tilt'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
 
-defineProps<{ app: AppEntity }>()
+const props = withDefaults(defineProps<{ app: AppEntity; basePath?: string }>(), { basePath: '/apps' })
 </script>
 
 <template>
-  <RouterLink :to="`/apps/${app.slug}`" class="app-card tilt-card" @mousemove="onTilt" @mouseleave="resetTilt">
+  <RouterLink :to="`${props.basePath}/${app.slug}`" class="app-card tilt-card" @mousemove="onTilt" @mouseleave="resetTilt">
     <div class="app-card__layer tilt-card__layer">
       <div class="app-card__logo-wrap">
         <img v-if="app.logo_url" :src="app.logo_url" :alt="app.name" class="app-card__logo" />

@@ -8,7 +8,8 @@ const links = [
   { to: '/admin/faqs', label: 'Preguntas frecuentes' },
   { to: '/admin/redes-sociales', label: 'Redes sociales' },
   { to: '/admin/politicas', label: 'Políticas' },
-  { to: '/admin/ser-agente', label: 'Contenido: Ser agente' }
+  { to: '/admin/ser-agente', label: 'Contenido: Ser agente' },
+  { to: '/admin/moderadores', label: 'Moderadores' }
 ]
 </script>
 

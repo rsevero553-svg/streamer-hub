@@ -1,6 +1,11 @@
 import { supabase } from './supabase'
 
-export async function signUp(params: { fullName: string; phone: string; email: string; password: string; gender?: 'women' | 'men' }) {
+export async function resolveReferrerBySlug(slug: string): Promise<string | null> {
+  const { data } = await supabase.from('profiles').select('id').eq('agency_slug', slug).eq('role', 'moderator').maybeSingle()
+  return data?.id ?? null
+}
+
+export async function signUp(params: { fullName: string; phone: string; email: string; password: string; gender?: 'women' | 'men'; referredBy?: string | null }) {
   const { data, error } = await supabase.auth.signUp({
     email: params.email,
     password: params.password,
@@ -8,7 +13,8 @@ export async function signUp(params: { fullName: string; phone: string; email: s
       data: {
         full_name: params.fullName,
         phone: params.phone,
-        gender: params.gender ?? null
+        gender: params.gender ?? null,
+        referred_by: params.referredBy ?? null
       }
     }
   })

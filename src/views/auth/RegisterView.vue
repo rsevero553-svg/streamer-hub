@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { signUp } from '@/services/auth.service'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { signUp, resolveReferrerBySlug } from '@/services/auth.service'
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
@@ -17,7 +17,18 @@ const accepted = ref(false)
 const error = ref('')
 const success = ref(false)
 const loading = ref(false)
+const referredBy = ref<string | null>(null)
+const referrerLabel = ref('')
 const router = useRouter()
+const route = useRoute()
+
+onMounted(async () => {
+  const ref = (route.query.ref as string) || ''
+  if (ref) {
+    referredBy.value = await resolveReferrerBySlug(ref)
+    if (referredBy.value) referrerLabel.value = ref
+  }
+})
 
 async function submit() {
   error.value = ''
@@ -25,7 +36,14 @@ async function submit() {
   if (!accepted.value) { error.value = 'Debes aceptar las políticas para continuar.'; return }
   loading.value = true
   try {
-    await signUp({ fullName: fullName.value, phone: phone.value, email: email.value, password: password.value, gender: gender.value as any })
+    await signUp({
+      fullName: fullName.value,
+      phone: phone.value,
+      email: email.value,
+      password: password.value,
+      gender: gender.value as any,
+      referredBy: referredBy.value
+    })
     success.value = true
     setTimeout(() => router.push('/iniciar-sesion'), 1500)
   } catch (e: any) {
@@ -41,6 +59,7 @@ async function submit() {
     <div class="container auth-container">
       <BaseCard class="auth-card animate-fade-up">
         <h1>Crear cuenta</h1>
+        <BaseAlert v-if="referrerLabel" tone="info">Te estás registrando a través de la agencia "{{ referrerLabel }}".</BaseAlert>
         <BaseAlert v-if="error" tone="danger">{{ error }}</BaseAlert>
         <BaseAlert v-if="success" tone="success">Cuenta creada. Redirigiendo a inicio de sesión...</BaseAlert>
         <form @submit.prevent="submit" class="form">

@@ -12,7 +12,7 @@ const route = useRoute()
 const router = useRouter()
 const appId = route.params.id as string
 const app = ref<any>(null)
-const BACK_PATH = '/admin/apps'
+const BACK_PATH = '/moderador/apps'
 
 const activities = ref<any[]>([])
 const withdrawals = ref<any[]>([])
