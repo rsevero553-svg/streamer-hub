@@ -13,7 +13,7 @@ import BaseBadge from '@/components/ui/BaseBadge.vue'
 const apps = ref<AppEntity[]>([])
 const auth = useAuthStore()
 const modalOpen = ref(false)
-const editing = ref<Partial<AppEntity>>({})
+const editing = ref<Record<string, any>>({})
 
 async function load() {
   const { data } = await supabase.from('apps').select('*').order('sort_order')

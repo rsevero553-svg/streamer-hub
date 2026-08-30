@@ -12,7 +12,7 @@ import BaseSelect from '@/components/ui/BaseSelect.vue'
 
 const guides = ref<Guide[]>([])
 const modalOpen = ref(false)
-const editing = ref<Partial<Guide>>({})
+const editing = ref<Record<string, any>>({})
 
 async function load() {
   const { data } = await supabase.from('app_guides').select('*').order('sort_order')

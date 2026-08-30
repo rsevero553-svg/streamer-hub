@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ modelValue: string; label?: string; type?: string; placeholder?: string; required?: boolean; error?: string }>()
+withDefaults(defineProps<{ modelValue: string | number | null | undefined; label?: string; type?: string; placeholder?: string; required?: boolean; error?: string }>(), { modelValue: '' })
 defineEmits<{ 'update:modelValue': [string] }>()
 </script>
 <template>
@@ -9,7 +9,7 @@ defineEmits<{ 'update:modelValue': [string] }>()
       class="field__input"
       :type="type || 'text'"
       :placeholder="placeholder"
-      :value="modelValue"
+      :value="modelValue ?? ''"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />
     <span v-if="error" class="field__error">{{ error }}</span>

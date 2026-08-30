@@ -1,11 +1,11 @@
 <script setup lang="ts">
-defineProps<{ modelValue: string; label?: string; options: { value: string; label: string }[] }>()
+withDefaults(defineProps<{ modelValue: string | null | undefined; label?: string; options: { value: string; label: string }[] }>(), { modelValue: '' })
 defineEmits<{ 'update:modelValue': [string] }>()
 </script>
 <template>
   <label class="field">
     <span v-if="label" class="field__label">{{ label }}</span>
-    <select class="field__input" :value="modelValue" @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)">
+    <select class="field__input" :value="modelValue ?? ''" @change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)">
       <option v-for="opt in options" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
     </select>
   </label>

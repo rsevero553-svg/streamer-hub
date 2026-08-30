@@ -6,8 +6,11 @@ import BaseCard from '@/components/ui/BaseCard.vue'
 
 const auth = useAuthStore()
 const counts = ref({ apps: 0, guides: 0, referrals: 0 })
+const origin = ref('')
 
 onMounted(async () => {
+  origin.value = typeof window !== 'undefined' ? window.location.origin : ''
+
   if (!auth.userId) return
   const [apps, guides, referrals] = await Promise.all([
     supabase.from('apps').select('id', { count: 'exact', head: true }).eq('owner_id', auth.userId),
@@ -28,7 +31,7 @@ onMounted(async () => {
     </div>
     <BaseCard style="margin-top: 1.5rem;">
       <p>Tu link de referido para compartir con nuevos usuarios:</p>
-      <code>{{ typeof window !== 'undefined' ? window.location.origin : '' }}/agencia/{{ auth.profile?.agency_slug }}</code>
+      <code>{{ origin }}/agencia/{{ auth.profile?.agency_slug }}</code>
     </BaseCard>
   </div>
 </template>

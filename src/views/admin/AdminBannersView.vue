@@ -10,7 +10,7 @@ import BaseBadge from '@/components/ui/BaseBadge.vue'
 
 const banners = ref<Banner[]>([])
 const modalOpen = ref(false)
-const editing = ref<Partial<Banner>>({})
+const editing = ref<Record<string, any>>({})
 
 async function load() {
   const { data } = await supabase.from('banners').select('*').order('sort_order')

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ modelValue: string; label?: string; rows?: number; placeholder?: string }>()
+withDefaults(defineProps<{ modelValue: string | null | undefined; label?: string; rows?: number; placeholder?: string }>(), { modelValue: '' })
 defineEmits<{ 'update:modelValue': [string] }>()
 </script>
 <template>
@@ -9,7 +9,7 @@ defineEmits<{ 'update:modelValue': [string] }>()
       class="field__input"
       :rows="rows || 4"
       :placeholder="placeholder"
-      :value="modelValue"
+      :value="modelValue ?? ''"
       @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
     />
   </label>
