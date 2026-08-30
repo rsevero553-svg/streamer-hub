@@ -65,6 +65,7 @@ const routes = [
       { path: 'apps/:appSlug', name: 'agency-app-detail', component: () => import('@/views/apps/AppDetailView.vue') },
       { path: 'ser-agente', name: 'agency-become-agent', component: () => import('@/views/agency/AgencyBecomeAgentView.vue') }
     ]
+  },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFoundView.vue') }
 ]
 
