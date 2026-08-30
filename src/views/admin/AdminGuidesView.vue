@@ -8,6 +8,7 @@ import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseTextarea from '@/components/ui/BaseTextarea.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
+import BaseSelect from '@/components/ui/BaseSelect.vue'
 
 const guides = ref<Guide[]>([])
 const modalOpen = ref(false)
@@ -19,7 +20,7 @@ async function load() {
 }
 onMounted(load)
 
-function openNew() { editing.value = { title: '', is_general: true, is_active: true, sort_order: 0 }; modalOpen.value = true }
+function openNew() { editing.value = { title: '', is_general: true, is_active: true, sort_order: 0, is_install_guide: false, app_mode: '', daily_time_estimate: '' }; modalOpen.value = true }
 function openEdit(g: Guide) { editing.value = { ...g }; modalOpen.value = true }
 async function save() {
   if (editing.value.id) await supabase.from('app_guides').update(editing.value).eq('id', editing.value.id)
@@ -65,6 +66,9 @@ async function remove(g: Guide) {
         <BaseTextarea v-model="editing.content" label="Contenido" :rows="6" />
         <BaseInput v-model="editing.cover_url" label="URL de portada" />
         <BaseInput v-model="editing.telegram_url" label="URL de Telegram (opcional)" />
+        <label class="checkbox"><input type="checkbox" v-model="editing.is_install_guide" /> Es guía de instalación</label>
+        <BaseSelect v-if="editing.is_install_guide" v-model="editing.app_mode" label="Modo de la app" :options="[{value:'messaging',label:'Mensajería'},{value:'video_calls',label:'Videollamadas'},{value:'live',label:'Live'},{value:'match',label:'Match'}]" />
+        <BaseInput v-if="editing.is_install_guide" v-model="editing.daily_time_estimate" label="Tiempo diario estimado (ej. 2-3 horas)" />
         <BaseButton @click="save">Guardar</BaseButton>
       </div>
     </BaseModal>
@@ -78,4 +82,5 @@ async function remove(g: Guide) {
 .table th, .table td { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--color-border); font-size: var(--fs-sm); }
 .actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .form { display: flex; flex-direction: column; gap: var(--space-4); }
+.checkbox { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-sm); }
 </style>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { fetchAppBySlug } from '@/services/applications.service'
+import { fetchAppBySlug, fetchInstallGuideForApp } from '@/services/applications.service'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { copyToClipboard } from '@/utils/clipboard'
 import type { AppDetail } from '@/types/application'
+import type { Guide } from '@/types/guide'
 import { useMeta } from '@/composables/useMeta'
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseBadge from '@/components/ui/BaseBadge.vue'
@@ -17,6 +18,7 @@ const route = useRoute()
 const app = ref<AppDetail | null>(null)
 const loading = ref(true)
 const copied = ref<string | null>(null)
+const installGuide = ref<Guide | null>(null)
 
 const pageTitle = ref('Cargando...')
 const pageDescription = ref('')
@@ -30,6 +32,7 @@ onMounted(async () => {
   if (app.value) {
     pageTitle.value = app.value.name
     pageDescription.value = app.value.description || `Conoce cómo funciona ${app.value.name}: actividades, retiros, agencia y guías.`
+    installGuide.value = await fetchInstallGuideForApp(app.value.id)
   } else {
     pageTitle.value = 'Aplicación no encontrada'
   }
@@ -80,6 +83,12 @@ const telegramContacts = computed(() => app.value?.contacts.filter(c => c.type =
         <p v-if="app.last_verified_at" class="detail__verified">
           ✓ Información verificada el {{ new Date(app.last_verified_at).toLocaleDateString('es') }} — proporcionada por la plataforma, no por la aplicación externa.
         </p>
+      </BaseCard>
+
+      <BaseCard v-if="installGuide" class="detail__section">
+        <h2>Guía de instalación</h2>
+        <p>Aprende paso a paso cómo instalar y comenzar a usar {{ app.name }}.</p>
+        <BaseButton tag="a" :href="`/guias/${installGuide.id}`">Ver guía de instalación →</BaseButton>
       </BaseCard>
 
       <BaseCard v-if="app.activities.length" class="detail__section">

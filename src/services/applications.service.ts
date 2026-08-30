@@ -1,5 +1,6 @@
 import { supabase } from './supabase'
 import type { AppEntity, AppDetail, Gender } from '@/types/application'
+import type { Guide } from '@/types/guide'
 
 export async function fetchApps(gender?: Gender) {
   let query = supabase
@@ -25,6 +26,11 @@ export async function fetchFeaturedApps() {
     .limit(8)
   if (error) throw error
   return (data ?? []) as AppEntity[]
+}
+
+export async function fetchInstallGuideForApp(appId: string): Promise<Guide | null> {
+  const { data } = await supabase.from('app_guides').select('*').eq('app_id', appId).eq('is_install_guide', true).eq('is_active', true).limit(1).maybeSingle()
+  return (data as Guide) ?? null
 }
 
 export async function fetchAppBySlug(slug: string): Promise<AppDetail | null> {
