@@ -11,6 +11,16 @@ const users = ref<any[]>([])
 const payments = ref<any[]>([])
 const modalOpen = ref(false)
 const editing = ref<any>({})
+const origin = ref('')
+const copiedSlug = ref<string | null>(null)
+
+async function copyLink(slug: string) {
+  try {
+    await navigator.clipboard.writeText(`${origin.value}/agencia/${slug}`)
+    copiedSlug.value = slug
+    setTimeout(() => (copiedSlug.value = null), 1500)
+  } catch { /* noop */ }
+}
 
 async function load() {
   const [u, p] = await Promise.all([
@@ -20,7 +30,10 @@ async function load() {
   users.value = u.data ?? []
   payments.value = p.data ?? []
 }
-onMounted(load)
+onMounted(() => {
+  origin.value = typeof window !== 'undefined' ? window.location.origin : ''
+  load()
+})
 
 function moderators() {
   return users.value.filter(u => u.role === 'moderator')
@@ -89,7 +102,13 @@ async function rejectPayment(p: any) {
         <thead><tr><th>Agencia</th><th>Contacto</th><th>Membresía</th><th></th></tr></thead>
         <tbody>
           <tr v-for="m in moderators()" :key="m.id">
-            <td>{{ m.agency_name || m.full_name }} <span class="muted">/{{ m.agency_slug }}</span></td>
+            <td>
+              {{ m.agency_name || m.full_name }}
+              <div v-if="m.agency_slug" class="ref-link">
+                <code>{{ origin }}/agencia/{{ m.agency_slug }}</code>
+                <button class="copy-btn" @click="copyLink(m.agency_slug)">{{ copiedSlug === m.agency_slug ? '✓' : 'Copiar' }}</button>
+              </div>
+            </td>
             <td class="muted">{{ m.email }}</td>
             <td><BaseBadge :tone="m.membership_status === 'paid' ? 'success' : m.membership_status === 'pending_review' ? 'warning' : 'danger'">{{ m.membership_status }}</BaseBadge></td>
             <td class="actions">
@@ -119,6 +138,7 @@ async function rejectPayment(p: any) {
       <div class="form">
         <BaseInput v-model="editing.agency_name" label="Nombre de la agencia" required />
         <BaseInput v-model="editing.agency_slug" label="Slug (url: /agencia/tu-slug)" required />
+        <p v-if="editing.agency_slug" class="link-preview">Link completo: <code>{{ origin }}/agencia/{{ editing.agency_slug }}</code></p>
         <BaseInput v-model="editing.moderator_whatsapp" label="WhatsApp de contacto de la agencia" />
         <BaseButton @click="savePromotion">Confirmar</BaseButton>
       </div>
@@ -133,6 +153,11 @@ async function rejectPayment(p: any) {
 .table { width: 100%; border-collapse: collapse; }
 .table td, .table th { text-align: left; padding: var(--space-3); border-bottom: 1px solid var(--color-border); font-size: var(--fs-sm); }
 .muted { color: var(--color-text-faint); font-size: var(--fs-xs); }
+.ref-link { display: flex; align-items: center; gap: var(--space-2); margin-top: var(--space-1); }
+.ref-link code { font-size: var(--fs-xs); color: var(--color-text-muted); word-break: break-all; }
+.copy-btn { background: var(--color-surface-strong); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 2px var(--space-2); font-size: var(--fs-xs); color: var(--color-text); flex-shrink: 0; }
+.link-preview { font-size: var(--fs-sm); color: var(--color-text-muted); margin-top: -0.5rem; }
+.link-preview code { color: var(--color-pink-400); word-break: break-all; }
 .actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 .form { display: flex; flex-direction: column; gap: var(--space-4); }
 </style>

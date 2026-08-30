@@ -1,14 +1,23 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
 import { supabase } from '@/services/supabase'
-import { ref } from 'vue'
+import { fetchPublicSettings } from '@/services/settings.service'
+import { copyToClipboard } from '@/utils/clipboard'
+import { onMounted, ref } from 'vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 
 const auth = useAuthStore()
 const claiming = ref(false)
 const claimed = ref(false)
+const wallet = ref('')
+const copied = ref(false)
 
-const WALLET = 'TU-DIRECCION-USDT-BEP20-AQUI'
+onMounted(async () => {
+  try {
+    const settings = await fetchPublicSettings()
+    wallet.value = settings.membership_wallet_usdt_bep20 || ''
+  } catch { wallet.value = '' }
+})
 
 const isOverdue = () => {
   const p = auth.profile
@@ -17,6 +26,13 @@ const isOverdue = () => {
     return new Date(p.membership_expires_at) < new Date()
   }
   return p.membership_status !== 'paid'
+}
+
+async function copyWallet() {
+  if (await copyToClipboard(wallet.value)) {
+    copied.value = true
+    setTimeout(() => (copied.value = false), 1500)
+  }
 }
 
 async function claimPayment() {
@@ -36,9 +52,15 @@ async function claimPayment() {
       <h2>⚠️ No has pagado la membresía</h2>
       <p>Tu agencia necesita estar al día para operar todos los servicios de tu panel.</p>
       <div class="gate__price">12.50 USDT <span>(red BEP20)</span></div>
-      <div class="gate__wallet">
-        <code>{{ WALLET }}</code>
+
+      <div v-if="wallet" class="gate__wallet">
+        <code>{{ wallet }}</code>
+        <button class="gate__copy" @click="copyWallet">{{ copied ? '✓ Copiado' : 'Copiar' }}</button>
       </div>
+      <p v-else class="gate__no-wallet">
+        El administrador aún no configuró la wallet de pago. Contáctalo directamente para completar tu membresía.
+      </p>
+
       <p class="gate__note">Realiza el pago a esa dirección y presiona el botón. Un administrador confirmará tu pago manualmente.</p>
       <BaseButton v-if="!claimed && auth.profile?.membership_status !== 'pending_review'" :disabled="claiming" @click="claimPayment">
         {{ claiming ? 'Enviando...' : 'Ya pagué' }}
@@ -62,8 +84,10 @@ async function claimPayment() {
 .gate__card p { color: var(--color-text-muted); font-size: var(--fs-sm); margin-bottom: var(--space-4); }
 .gate__price { font-family: var(--font-display); font-size: var(--fs-2xl); font-weight: 800; margin-bottom: var(--space-4); }
 .gate__price span { font-size: var(--fs-sm); color: var(--color-text-faint); font-weight: 400; }
-.gate__wallet { background: var(--color-surface-strong); border-radius: var(--radius-md); padding: var(--space-3); margin-bottom: var(--space-4); word-break: break-all; }
-.gate__wallet code { font-size: var(--fs-xs); }
+.gate__wallet { background: var(--color-surface-strong); border-radius: var(--radius-md); padding: var(--space-3); margin-bottom: var(--space-4); display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.gate__wallet code { font-size: var(--fs-xs); word-break: break-all; text-align: left; }
+.gate__copy { background: var(--gradient-brand); color: white; border: none; border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3); font-size: var(--fs-xs); font-weight: 700; flex-shrink: 0; }
+.gate__no-wallet { color: var(--color-warning); font-size: var(--fs-xs); margin-bottom: var(--space-4); }
 .gate__note { font-size: var(--fs-xs); }
 .gate__pending { color: var(--color-warning); font-weight: 600; }
 </style>

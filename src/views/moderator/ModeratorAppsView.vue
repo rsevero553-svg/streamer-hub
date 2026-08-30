@@ -16,7 +16,8 @@ const modalOpen = ref(false)
 const editing = ref<Record<string, any>>({})
 
 async function load() {
-  const { data } = await supabase.from('apps').select('*').order('sort_order')
+  if (!auth.userId) return
+  const { data } = await supabase.from('apps').select('*').eq('owner_id', auth.userId).order('sort_order')
   apps.value = (data ?? []) as AppEntity[]
 }
 onMounted(load)

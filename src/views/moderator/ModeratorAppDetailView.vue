@@ -2,16 +2,20 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '@/services/supabase'
+import { useAuthStore } from '@/stores/auth'
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
+import EmptyState from '@/components/ui/EmptyState.vue'
 
 const route = useRoute()
 const router = useRouter()
+const auth = useAuthStore()
 const appId = route.params.id as string
 const app = ref<any>(null)
+const accessDenied = ref(false)
 const BACK_PATH = '/moderador/apps'
 
 const activities = ref<any[]>([])
@@ -38,6 +42,12 @@ async function loadAll() {
     supabase.from('app_income_sources').select('*').eq('app_id', appId).order('sort_order')
   ])
   app.value = a.data
+
+  if (app.value && app.value.owner_id !== auth.userId) {
+    accessDenied.value = true
+    app.value = null
+    return
+  }
   activities.value = act.data ?? []
   withdrawals.value = wd.data ?? []
   agencies.value = ag.data ?? []
@@ -94,7 +104,8 @@ const FREQUENCY_LABELS: Record<string, string> = { daily: 'Diario', weekly: 'Sem
 </script>
 
 <template>
-  <div v-if="app">
+  <EmptyState v-if="accessDenied" message="No tienes permiso para gestionar esta aplicación." />
+  <div v-else-if="app">
     <button class="back" @click="router.push(BACK_PATH)">← Volver a aplicaciones</button>
     <h1 class="title">{{ app.name }}</h1>
 

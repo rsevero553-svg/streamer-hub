@@ -10,8 +10,10 @@ import BaseAlert from '@/components/ui/BaseAlert.vue'
 const auth = useAuthStore()
 const form = ref({ agency_name: '', agency_slug: '', agency_logo_url: '', moderator_whatsapp: '', moderator_instagram: '', moderator_telegram: '' })
 const saved = ref(false)
+const origin = ref('')
 
 onMounted(() => {
+  origin.value = typeof window !== 'undefined' ? window.location.origin : ''
   const p = auth.profile
   if (p) {
     form.value = {
@@ -42,6 +44,7 @@ async function save() {
       <div class="form">
         <BaseInput v-model="form.agency_name" label="Nombre de la agencia" />
         <BaseInput v-model="form.agency_slug" label="Slug (url pública: /agencia/tu-slug)" />
+        <p v-if="form.agency_slug" class="link-preview">Tu link completo: <code>{{ origin }}/agencia/{{ form.agency_slug }}</code></p>
         <BaseInput v-model="form.agency_logo_url" label="URL del logo" />
         <BaseInput v-model="form.moderator_whatsapp" label="WhatsApp de contacto (tu sub-marca)" />
         <BaseInput v-model="form.moderator_instagram" label="Instagram (opcional)" />
@@ -55,4 +58,6 @@ async function save() {
 <style scoped>
 .title { font-family: var(--font-display); font-size: var(--fs-2xl); margin-bottom: var(--space-6); }
 .form { display: flex; flex-direction: column; gap: var(--space-4); }
+.link-preview { font-size: var(--fs-sm); color: var(--color-text-muted); margin-top: -0.5rem; }
+.link-preview code { color: var(--color-pink-400); word-break: break-all; }
 </style>
