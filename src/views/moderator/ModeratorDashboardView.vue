@@ -30,8 +30,8 @@ onMounted(async () => {
       <BaseCard class="stat"><span>{{ counts.referrals }}</span><p>Usuarios referidos</p></BaseCard>
     </div>
     <BaseCard style="margin-top: 1.5rem;">
-      <p>Tu link de referido para compartir con nuevos usuarios:</p>
-      <code>{{ origin }}/agencia/{{ auth.profile?.agency_slug }}</code>
+      <p>Tu link de referido para compartir con nuevos usuarios (los lleva directo al registro, o a tu zona si ya tienen cuenta):</p>
+      <code>{{ origin }}/r/{{ auth.profile?.agency_slug }}</code>
     </BaseCard>
   </div>
 </template>

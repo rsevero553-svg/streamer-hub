@@ -44,7 +44,7 @@ async function save() {
       <div class="form">
         <BaseInput v-model="form.agency_name" label="Nombre de la agencia" />
         <BaseInput v-model="form.agency_slug" label="Slug (url pública: /agencia/tu-slug)" />
-        <p v-if="form.agency_slug" class="link-preview">Tu link completo: <code>{{ origin }}/agencia/{{ form.agency_slug }}</code></p>
+        <p v-if="form.agency_slug" class="link-preview">Tu link para compartir: <code>{{ origin }}/r/{{ form.agency_slug }}</code></p>
         <BaseInput v-model="form.agency_logo_url" label="URL del logo" />
         <BaseInput v-model="form.moderator_whatsapp" label="WhatsApp de contacto (tu sub-marca)" />
         <BaseInput v-model="form.moderator_instagram" label="Instagram (opcional)" />
