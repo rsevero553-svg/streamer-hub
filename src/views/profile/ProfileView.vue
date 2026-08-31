@@ -75,6 +75,7 @@ async function logout() {
           <p class="readonly">Rol: {{ auth.profile?.role }}</p>
           <div class="actions">
             <BaseButton @click="save">Guardar cambios</BaseButton>
+            <BaseButton tag="a" href="/mi-nomina" variant="secondary">Mi nómina</BaseButton>
             <BaseButton v-if="auth.isAdmin" tag="a" href="/admin" variant="secondary">Ir al panel admin</BaseButton>
             <BaseButton v-if="auth.profile?.role === 'moderator'" tag="a" href="/moderador" variant="secondary">Ir a mi panel de agencia</BaseButton>
             <BaseButton variant="secondary" @click="logout">Cerrar sesión</BaseButton>

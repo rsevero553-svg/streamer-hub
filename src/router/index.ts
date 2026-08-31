@@ -22,6 +22,12 @@ const routes = [
         component: () => import('@/views/profile/ProfileView.vue'),
         meta: { requiresAuth: true }
       },
+      {
+        path: 'mi-nomina',
+        name: 'my-payroll',
+        component: () => import('@/views/MyPayrollView.vue'),
+        meta: { requiresAuth: true }
+      },
       { path: 'politicas', name: 'policies', component: () => import('@/views/content/PoliciesView.vue') },
       { path: 'contacto', name: 'contact', component: () => import('@/views/content/ContactView.vue') }
     ]
@@ -42,7 +48,8 @@ const routes = [
       { path: 'politicas', name: 'admin-policies', component: () => import('@/views/admin/AdminPoliciesView.vue') },
       { path: 'ser-agente', name: 'admin-agent-content', component: () => import('@/views/admin/AdminAgentContentView.vue') },
       { path: 'moderadores', name: 'admin-moderators', component: () => import('@/views/admin/AdminModeratorsView.vue') },
-      { path: 'notificaciones', name: 'admin-notifications', component: () => import('@/views/admin/AdminNotificationsView.vue') }
+      { path: 'notificaciones', name: 'admin-notifications', component: () => import('@/views/admin/AdminNotificationsView.vue') },
+      { path: 'nomina', name: 'admin-payroll', component: () => import('@/views/admin/AdminPayrollView.vue') }
     ]
   },
   {
@@ -57,7 +64,8 @@ const routes = [
       { path: 'agencia', name: 'moderator-agency', component: () => import('@/views/moderator/ModeratorAgencyView.vue') },
       { path: 'membresia', name: 'moderator-membership', component: () => import('@/views/moderator/ModeratorMembershipView.vue') },
       { path: 'sorteo', name: 'moderator-raffle', component: () => import('@/views/moderator/ModeratorRaffleView.vue') },
-      { path: 'notificaciones', name: 'moderator-notifications', component: () => import('@/views/moderator/ModeratorNotificationsView.vue') }
+      { path: 'notificaciones', name: 'moderator-notifications', component: () => import('@/views/moderator/ModeratorNotificationsView.vue') },
+      { path: 'nomina', name: 'moderator-payroll', component: () => import('@/views/moderator/ModeratorPayrollView.vue') }
     ]
   },
   {

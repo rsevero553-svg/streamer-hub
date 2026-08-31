@@ -10,7 +10,8 @@ const links = [
   { to: '/admin/politicas', label: 'Políticas' },
   { to: '/admin/ser-agente', label: 'Contenido: Ser agente' },
   { to: '/admin/moderadores', label: 'Moderadores' },
-  { to: '/admin/notificaciones', label: 'Notificaciones' }
+  { to: '/admin/notificaciones', label: 'Notificaciones' },
+  { to: '/admin/nomina', label: 'Nómina general' }
 ]
 </script>
 

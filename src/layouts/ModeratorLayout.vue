@@ -7,7 +7,8 @@ const links = [
   { to: '/moderador/agencia', label: 'Mi agencia' },
   { to: '/moderador/membresia', label: 'Membresía' },
   { to: '/moderador/sorteo', label: 'Sorteo semanal' },
-  { to: '/moderador/notificaciones', label: 'Notificar a referidos' }
+  { to: '/moderador/notificaciones', label: 'Notificar a referidos' },
+  { to: '/moderador/nomina', label: 'Nómina de mi agencia' }
 ]
 </script>
 
