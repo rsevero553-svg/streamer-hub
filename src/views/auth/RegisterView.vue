@@ -59,7 +59,10 @@ async function submit() {
     <div class="container auth-container">
       <BaseCard class="auth-card animate-fade-up">
         <h1>Crear cuenta</h1>
-        <BaseAlert v-if="referrerLabel" tone="info">Te estás registrando a través de la agencia "{{ referrerLabel }}".</BaseAlert>
+        <BaseAlert v-if="referrerLabel" tone="info">
+          Te estás registrando a través de la agencia "{{ referrerLabel }}".
+          ¿Ya tienes cuenta? <RouterLink :to="{ path: '/iniciar-sesion', query: { ref: referrerLabel } }">Inicia sesión aquí</RouterLink> y te llevaremos directo a tu zona.
+        </BaseAlert>
         <BaseAlert v-if="error" tone="danger">{{ error }}</BaseAlert>
         <BaseAlert v-if="success" tone="success">Cuenta creada. Redirigiendo a inicio de sesión...</BaseAlert>
         <form @submit.prevent="submit" class="form">

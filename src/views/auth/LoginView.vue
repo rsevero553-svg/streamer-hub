@@ -51,13 +51,16 @@ async function submit() {
     <div class="container auth-container">
       <BaseCard class="auth-card animate-fade-up">
         <h1>Iniciar sesión</h1>
+        <BaseAlert v-if="route.query.ref" tone="info">
+          Si tu cuenta ya está registrada, inicia sesión y te llevaremos directo a tu zona.
+        </BaseAlert>
         <BaseAlert v-if="error" tone="danger">{{ error }}</BaseAlert>
         <form @submit.prevent="submit" class="form">
           <BaseInput v-model="email" type="email" label="Correo electrónico" required />
           <BaseInput v-model="password" type="password" label="Contraseña" required />
           <BaseButton :disabled="loading" size="lg">{{ loading ? 'Ingresando...' : 'Iniciar sesión' }}</BaseButton>
         </form>
-        <p class="auth-switch">¿No tienes cuenta? <RouterLink to="/registro">Regístrate</RouterLink></p>
+        <p class="auth-switch">¿No tienes cuenta? <RouterLink :to="{ path: '/registro', query: route.query.ref ? { ref: route.query.ref } : {} }">Regístrate</RouterLink></p>
         <p class="auth-switch"><RouterLink to="/recuperar-contrasena">¿Olvidaste tu contraseña?</RouterLink></p>
       </BaseCard>
     </div>
