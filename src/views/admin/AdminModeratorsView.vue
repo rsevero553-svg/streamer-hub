@@ -16,7 +16,7 @@ const copiedSlug = ref<string | null>(null)
 
 async function copyLink(slug: string) {
   try {
-    await navigator.clipboard.writeText(`${origin.value}/agencia/${slug}`)
+    await navigator.clipboard.writeText(`${origin.value}/r/${slug}`)
     copiedSlug.value = slug
     setTimeout(() => (copiedSlug.value = null), 1500)
   } catch { /* noop */ }
@@ -105,7 +105,7 @@ async function rejectPayment(p: any) {
             <td>
               {{ m.agency_name || m.full_name }}
               <div v-if="m.agency_slug" class="ref-link">
-                <code>{{ origin }}/agencia/{{ m.agency_slug }}</code>
+                <code>{{ origin }}/r/{{ m.agency_slug }}</code>
                 <button class="copy-btn" @click="copyLink(m.agency_slug)">{{ copiedSlug === m.agency_slug ? '✓' : 'Copiar' }}</button>
               </div>
             </td>
@@ -138,7 +138,7 @@ async function rejectPayment(p: any) {
       <div class="form">
         <BaseInput v-model="editing.agency_name" label="Nombre de la agencia" required />
         <BaseInput v-model="editing.agency_slug" label="Slug (url: /agencia/tu-slug)" required />
-        <p v-if="editing.agency_slug" class="link-preview">Link completo: <code>{{ origin }}/agencia/{{ editing.agency_slug }}</code></p>
+        <p v-if="editing.agency_slug" class="link-preview">Link para compartir: <code>{{ origin }}/r/{{ editing.agency_slug }}</code></p>
         <BaseInput v-model="editing.moderator_whatsapp" label="WhatsApp de contacto de la agencia" />
         <BaseButton @click="savePromotion">Confirmar</BaseButton>
       </div>

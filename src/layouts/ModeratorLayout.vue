@@ -5,7 +5,9 @@ const links = [
   { to: '/moderador/apps', label: 'Mis apps' },
   { to: '/moderador/guias', label: 'Mis guías' },
   { to: '/moderador/agencia', label: 'Mi agencia' },
-  { to: '/moderador/membresia', label: 'Membresía' }
+  { to: '/moderador/membresia', label: 'Membresía' },
+  { to: '/moderador/sorteo', label: 'Sorteo semanal' },
+  { to: '/moderador/notificaciones', label: 'Notificar a referidos' }
 ]
 </script>
 

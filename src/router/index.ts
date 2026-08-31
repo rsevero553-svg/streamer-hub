@@ -41,7 +41,8 @@ const routes = [
       { path: 'redes-sociales', name: 'admin-social', component: () => import('@/views/admin/AdminSocialView.vue') },
       { path: 'politicas', name: 'admin-policies', component: () => import('@/views/admin/AdminPoliciesView.vue') },
       { path: 'ser-agente', name: 'admin-agent-content', component: () => import('@/views/admin/AdminAgentContentView.vue') },
-      { path: 'moderadores', name: 'admin-moderators', component: () => import('@/views/admin/AdminModeratorsView.vue') }
+      { path: 'moderadores', name: 'admin-moderators', component: () => import('@/views/admin/AdminModeratorsView.vue') },
+      { path: 'notificaciones', name: 'admin-notifications', component: () => import('@/views/admin/AdminNotificationsView.vue') }
     ]
   },
   {
@@ -54,7 +55,9 @@ const routes = [
       { path: 'apps/:id', name: 'moderator-app-detail', component: () => import('@/views/moderator/ModeratorAppDetailView.vue') },
       { path: 'guias', name: 'moderator-guides', component: () => import('@/views/moderator/ModeratorGuidesView.vue') },
       { path: 'agencia', name: 'moderator-agency', component: () => import('@/views/moderator/ModeratorAgencyView.vue') },
-      { path: 'membresia', name: 'moderator-membership', component: () => import('@/views/moderator/ModeratorMembershipView.vue') }
+      { path: 'membresia', name: 'moderator-membership', component: () => import('@/views/moderator/ModeratorMembershipView.vue') },
+      { path: 'sorteo', name: 'moderator-raffle', component: () => import('@/views/moderator/ModeratorRaffleView.vue') },
+      { path: 'notificaciones', name: 'moderator-notifications', component: () => import('@/views/moderator/ModeratorNotificationsView.vue') }
     ]
   },
   {
@@ -66,6 +69,7 @@ const routes = [
       { path: 'ser-agente', name: 'agency-become-agent', component: () => import('@/views/agency/AgencyBecomeAgentView.vue') }
     ]
   },
+  { path: '/r/:slug', name: 'referral-redirect', component: () => import('@/views/ReferralRedirectView.vue') },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('@/views/NotFoundView.vue') }
 ]
 

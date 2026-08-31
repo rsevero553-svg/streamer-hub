@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUiStore } from '@/stores/ui'
 import { useAuthStore } from '@/stores/auth'
+import NotificationBell from '@/components/notifications/NotificationBell.vue'
 const ui = useUiStore()
 const auth = useAuthStore()
 </script>
@@ -22,6 +23,7 @@ const auth = useAuthStore()
       </nav>
 
       <div class="header__actions">
+        <NotificationBell />
         <template v-if="!auth.isAuthenticated">
           <RouterLink to="/iniciar-sesion" class="header__link header__link--muted">Iniciar sesión</RouterLink>
           <RouterLink to="/registro" class="btn-mini">Registrarse</RouterLink>

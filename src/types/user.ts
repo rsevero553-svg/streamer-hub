@@ -20,6 +20,8 @@ export interface Profile {
   membership_status: MembershipStatus
   membership_expires_at: string | null
   referred_by: string | null
+  raffle_entry_id: string | null
+  raffle_entry_app_id: string | null
   created_at: string
 }
 

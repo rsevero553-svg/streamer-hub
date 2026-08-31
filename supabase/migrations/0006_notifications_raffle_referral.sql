@@ -1,0 +1,5 @@
+-- Ver contenido completo aplicado vía Supabase MCP en esta conversación:
+-- 1. Tabla notifications (scopes: global, moderator_broadcast, admin_to_moderator) + RLS
+-- 2. Campos raffle_entry_id / raffle_entry_app_id en profiles + trigger de validación
+-- 3. Tabla raffle_draws + RLS
+-- 4. Función draw_raffle_winner(uuid) — sorteo server-side, oculta el pool de participantes

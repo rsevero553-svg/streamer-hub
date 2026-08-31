@@ -7,6 +7,11 @@ export async function fetchAgencyBySlug(slug: string): Promise<Profile | null> {
   return (data as Profile) ?? null
 }
 
+export async function fetchModeratorSlugById(moderatorId: string): Promise<string | null> {
+  const { data } = await supabase.from('profiles').select('agency_slug').eq('id', moderatorId).eq('role', 'moderator').maybeSingle()
+  return data?.agency_slug ?? null
+}
+
 export async function fetchAgencyApps(moderatorId: string, gender?: Gender) {
   let query = supabase.from('apps').select('*').eq('owner_id', moderatorId).eq('status', 'active').order('sort_order')
   if (gender) query = query.eq('gender', gender)

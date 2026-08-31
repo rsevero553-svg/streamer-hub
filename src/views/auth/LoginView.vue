@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { signIn } from '@/services/auth.service'
+import { fetchModeratorSlugById } from '@/services/agency.service'
 import { useAuthStore } from '@/stores/auth'
 import BaseCard from '@/components/ui/BaseCard.vue'
 import BaseInput from '@/components/ui/BaseInput.vue'
@@ -22,7 +23,21 @@ async function submit() {
   try {
     await signIn(email.value, password.value)
     await auth.init()
-    router.push((route.query.redirect as string) || '/')
+
+    // Si hay un destino explícito pedido (ej. quería entrar a /perfil), respétalo.
+    if (route.query.redirect) {
+      router.push(route.query.redirect as string)
+      return
+    }
+
+    // Si el usuario está ligado a un moderador, siempre cae en SU zona (regla permanente de referido).
+    if (auth.profile?.referred_by) {
+      const slug = await fetchModeratorSlugById(auth.profile.referred_by)
+      router.push(slug ? `/agencia/${slug}` : '/')
+      return
+    }
+
+    router.push('/')
   } catch (e: any) {
     error.value = 'Credenciales incorrectas o cuenta inexistente.'
   } finally {
