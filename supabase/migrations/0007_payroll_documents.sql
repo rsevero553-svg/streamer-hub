@@ -1,0 +1,5 @@
+-- Ver contenido completo aplicado vía Supabase MCP en esta conversación:
+-- 1. Bucket privado 'payroll-docs'
+-- 2. Tabla payroll_documents (scope global/moderator) + RLS
+-- 3. Políticas de storage.objects por convención de carpetas (global/... | moderator/<id>/...)
+-- 4. Extensión pg_cron + función cleanup_expired_payroll_documents() + job diario a las 3am
