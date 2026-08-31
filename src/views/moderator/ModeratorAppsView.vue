@@ -23,7 +23,7 @@ async function load() {
 onMounted(load)
 
 function openNew() {
-  editing.value = { name: '', slug: '', gender: 'women', status: 'active', agency_required: false, sort_order: 0, countriesText: '', owner_id: auth.profile?.role === 'moderator' ? auth.userId : null, requires_verification: false } as any
+  editing.value = { name: '', slug: '', gender: 'women', status: 'active', agency_required: false, sort_order: 0, countriesText: '', owner_id: auth.userId, requires_verification: false } as any
   modalOpen.value = true
 }
 function openEdit(app: AppEntity) {

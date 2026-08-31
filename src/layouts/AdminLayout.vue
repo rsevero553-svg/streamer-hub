@@ -42,8 +42,9 @@ const links = [
 
 @media (max-width: 768px) {
   .admin-layout { grid-template-columns: 1fr; }
-  .admin-sidebar { flex-direction: row; overflow-x: auto; align-items: center; }
-  .admin-sidebar nav { flex-direction: row; }
+  .admin-sidebar { flex-direction: column; align-items: stretch; gap: var(--space-4); }
+  .admin-sidebar nav { flex-direction: row; flex-wrap: wrap; gap: var(--space-2); }
+  .admin-sidebar__link { flex: 1 1 auto; text-align: center; white-space: nowrap; }
   .admin-sidebar__back { margin-top: 0; }
 }
 </style>

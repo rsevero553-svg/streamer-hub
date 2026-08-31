@@ -38,8 +38,9 @@ const links = [
 .mod-content { padding: var(--space-7); overflow-x: hidden; }
 @media (max-width: 768px) {
   .mod-layout { grid-template-columns: 1fr; }
-  .mod-sidebar { flex-direction: row; overflow-x: auto; align-items: center; }
-  .mod-sidebar nav { flex-direction: row; }
+  .mod-sidebar { flex-direction: column; align-items: stretch; gap: var(--space-4); }
+  .mod-sidebar nav { flex-direction: row; flex-wrap: wrap; gap: var(--space-2); }
+  .mod-sidebar__link { flex: 1 1 auto; text-align: center; white-space: nowrap; }
   .mod-sidebar__back { margin-top: 0; }
 }
 </style>
